@@ -6,6 +6,7 @@ import config from 'src/common/config';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { DbConfig } from 'src/common/config/db.config';
 import { SnakeCaseNamingStrategy } from 'src/common/utils';
+import { AuthModule } from 'src/modules/auth/auth.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { SnakeCaseNamingStrategy } from 'src/common/utils';
             },
             inject: [ConfigService],
         }),
+        AuthModule,
     ],
     controllers: [AppController],
     providers: [AppService],
