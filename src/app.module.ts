@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from 'src/app.controller';
 import { AppService } from 'src/app.service';
-import config from 'src/config';
+import config from 'src/common/config';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
-import { DbConfig } from 'src/config/db.config';
-import { SnakeCaseNamingStrategy } from 'src/utils';
+import { DbConfig } from 'src/common/config/db.config';
+import { SnakeCaseNamingStrategy } from 'src/common/utils';
 
 @Module({
     imports: [
