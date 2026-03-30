@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 
 /**
- * Ensures string do not have special characters
+ * Ensures password is strong
  */
 export function IsvalidPassword(validationOptions?: ValidationOptions) {
     return (object: any, propertyName: string) => {
@@ -28,12 +28,12 @@ export class IsvalidPasswordRule implements ValidatorConstraintInterface {
     constructor() {}
 
     async validate(value: string) {
-        const validStringRegex =
-            /^(?=.*?[A-ZÀ-ÿ])(?=.*?[a-zÀ-ÿ])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
-        return typeof value === 'string' && validStringRegex.test(value);
+        const regex =
+            /^(?=.*?[A-ZÀ–Þ])(?=.*?[a-zà-ÿ])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+        return regex.test(value);
     }
 
     defaultMessage(args: ValidationArguments) {
-        return `${args.property} must be a valid ${args.property} without special characters`;
+        return 'The length of the password must be at least 8 characters long\nThe Password must contain at least one letter from the alphabet\nThe password must contain at least one upper case\nThe password should contain numerical character\nThe password should contain at least one special character: !@#$%^&*';
     }
 }

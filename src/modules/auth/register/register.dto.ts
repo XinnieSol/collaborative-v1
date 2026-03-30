@@ -74,3 +74,43 @@ export class RegisterDto {
     @Match('password')
     confirmPassword: string;
 }
+
+export class ResendCodeDto {
+    @ApiProperty({
+        type: String,
+        required: true,
+        name: 'email',
+        example: 'johndoe@mailsac.com',
+    })
+    @IsNotEmpty()
+    @IsString()
+    @IsEmail()
+    @Transform(({ value }) => value.trim().toLowerCase())
+    email: string;
+}
+
+export class VerifyEmailDto {
+    @ApiProperty({
+        type: String,
+        required: true,
+        name: 'email',
+        example: 'johndoe@mailsac.com',
+    })
+    @IsNotEmpty()
+    @IsString()
+    @IsEmail()
+    @Transform(({ value }) => value.trim().toLowerCase())
+    email: string;
+
+    @ApiProperty({
+        type: String,
+        name: 'code',
+        required: true,
+        example: '000000',
+    })
+    @IsNotEmpty()
+    @Transform(({ value }) => value.trim())
+    @IsString()
+    @Length(6, 6, { message: 'Invalid code' })
+    code: string;
+}

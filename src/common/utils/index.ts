@@ -1,6 +1,7 @@
 export * from './snake-case-naming-strategy.util';
 export * from './datasource.util';
 export * from './validation.util';
+export * from './date.util';
 
 export function randomNumeric(length: number) {
     let result = '';
