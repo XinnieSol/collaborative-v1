@@ -8,3 +8,24 @@ export function successReponse(
 ): HttpSuccessReponse {
     return { success: true, message, status: status || HttpStatus.OK, data };
 }
+
+export interface SocketResponse {
+    success: boolean;
+    status: number;
+    message: string;
+    data?: any;
+    errors?: any;
+}
+
+export const socketErrorResponse = (
+    message: string,
+    status: number,
+    errors?: object,
+): SocketResponse => {
+    return {
+        success: false,
+        status,
+        message,
+        errors,
+    };
+};

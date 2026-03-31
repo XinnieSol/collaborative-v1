@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
             const { user, authError, auth } = request;
 
             if (authError) {
-                console.log(authError);
+                this.logger.log(authError);
                 throw authError;
             }
 

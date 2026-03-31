@@ -43,4 +43,8 @@ export class ChatRoomService {
 
         // connect to gateway
     }
+
+    async get(chatRoomId: string) {
+        return this.chatRoomRepo.findOne({ where: { id: chatRoomId } });
+    }
 }

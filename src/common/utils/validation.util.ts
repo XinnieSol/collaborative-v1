@@ -1,8 +1,12 @@
 import {
     BadRequestException,
+    ExecutionContext,
     HttpStatus,
     ValidationError,
 } from '@nestjs/common';
+import { WsException } from '@nestjs/websockets';
+import { WsValidationException } from 'src/common/exceptions';
+import { socketErrorResponse } from 'src/common/helpers';
 
 const groupValidationErrors = (
     errors: ValidationError[],
@@ -38,9 +42,15 @@ const groupValidationErrors = (
     }));
 };
 
-export const validationExceptionsFactory = (errors: ValidationError[]) => {
+export const validationExceptionsFactory = (
+    errors: ValidationError[],
+    context?: ExecutionContext,
+) => {
     const groupedErrors = groupValidationErrors(errors);
 
+    if (context?.getType() === 'ws') {
+        throw new WsValidationException(groupedErrors);
+    }
     throw new BadRequestException({
         status: HttpStatus.BAD_REQUEST,
         errors: groupedErrors,
