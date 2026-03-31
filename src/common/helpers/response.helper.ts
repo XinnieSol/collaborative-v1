@@ -1,4 +1,8 @@
 import { HttpStatus } from '@nestjs/common';
+import { TokenExpiredError } from '@nestjs/jwt';
+import { MessagePatternEnum } from 'src/common/enums';
+import { AppWsException } from 'src/common/exceptions';
+import { ClientInterface } from 'src/common/interfaces';
 import { HttpSuccessReponse } from 'src/common/types';
 
 export function successReponse(
@@ -29,3 +33,20 @@ export const socketErrorResponse = (
         errors,
     };
 };
+
+export function handleErrorWithDisconnect(client: ClientInterface, error: any) {
+    if (error.name == TokenExpiredError.name) {
+        error = {
+            error: {
+                message: error?.message || 'Unknown error',
+                status: HttpStatus.UNAUTHORIZED,
+            },
+        };
+    }
+
+    const formattedErr = new AppWsException(error).getError();
+    client.emit(MessagePatternEnum.EXCEPTION, formattedErr);
+    client.disconnect();
+
+    throw new AppWsException(error);
+}

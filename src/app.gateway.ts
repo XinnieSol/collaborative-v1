@@ -13,7 +13,6 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AppWsException } from 'src/common/exceptions';
-import { WsValidationFilter } from 'src/common/filters';
 import { WsAuthGuard } from 'src/common/guards';
 import { ClientInterface } from 'src/common/interfaces';
 
@@ -22,13 +21,10 @@ import { ClientInterface } from 'src/common/interfaces';
         origin: '*',
     },
     allowEIO3: true,
-    namespace: '/chat',
 })
 @UseGuards(WsAuthGuard)
-@UsePipes(ValidationPipe)
-@UseFilters(WsValidationFilter)
-export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
-    private readonly logger = new Logger(ChatGateway.name);
+export class AppGateway implements OnGatewayInit, OnGatewayConnection {
+    private readonly logger = new Logger(AppGateway.name);
 
     @WebSocketServer()
     server: Server;
@@ -42,7 +38,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
     async handleConnection(client: Socket, ...args: any[]) {
         try {
             // get connected user chat rooms and join
-            this.logger.log(`New user connected|Client: ${client.id}`);
+            this.logger.log(`New user connecteddd|Client: ${client.id}`);
         } catch (error) {
             throw new AppWsException(error);
         }

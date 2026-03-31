@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ChatRoomMemberModule } from './chat-room-member/chat-room-member.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ChatRoomEntity } from 'src/modules/chat/chat-room/chat-room.entity';
-import { ChatRoomController } from 'src/modules/chat/chat-room/chat-room.controller';
-import { ChatRoomService } from 'src/modules/chat/chat-room/chat-room.service';
+import { ChatRoomEntity } from './chat-room.entity';
+import { ChatRoomController } from './chat-room.controller';
+import { ChatRoomService } from './chat-room.service';
 import { ChatRoomMemberEntity } from './chat-room-member/chat-room-member.entity';
+import { ChatRoomGateway } from './chat-room.gateway';
 
 @Module({
     imports: [
@@ -12,7 +13,7 @@ import { ChatRoomMemberEntity } from './chat-room-member/chat-room-member.entity
         ChatRoomMemberModule,
     ],
     controllers: [ChatRoomController],
-    providers: [ChatRoomService],
-    exports: [ChatRoomService],
+    providers: [ChatRoomService, ChatRoomGateway],
+    exports: [ChatRoomService, ChatRoomGateway],
 })
 export class ChatRoomModule {}

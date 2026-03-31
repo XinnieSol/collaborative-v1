@@ -11,5 +11,4 @@ export interface ClientInterface extends Socket {
         token: string;
         expiresAt?: number;
     };
-    authError: AppWsException;
 }

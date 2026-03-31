@@ -7,7 +7,7 @@ import { Column, DeleteDateColumn, Entity, ManyToOne } from 'typeorm';
 
 @Entity('messages')
 export class MessageEntity extends BaseAbstractEntity<MessageResponse> {
-    @Column('uuid')
+    @Column({ type: 'uuid' })
     chatRoomId: string;
 
     @ManyToOne(() => ChatRoomEntity)

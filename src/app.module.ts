@@ -14,6 +14,7 @@ import { SnakeCaseNamingStrategy } from 'src/common/utils';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { AuthMiddleware } from 'src/common/middlewares';
 import { ChatModule } from 'src/modules/chat/chat.module';
+import { AppGateway } from 'src/app.gateway';
 
 @Module({
     imports: [
@@ -41,7 +42,7 @@ import { ChatModule } from 'src/modules/chat/chat.module';
         ChatModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, AppGateway],
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {

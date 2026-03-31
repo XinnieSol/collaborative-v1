@@ -13,7 +13,11 @@ import {
     SWAGGER_TITLE,
     SWAGGER_VERSION,
 } from './common/constants';
-import { HttpExceptionFilter, ValidationFilter } from 'src/common/filters';
+import {
+    HttpExceptionFilter,
+    ValidationFilter,
+    WebSocketExceptionsFilter,
+} from 'src/common/filters';
 import { HttpValidationPipe } from 'src/common/pipes';
 
 async function bootstrap() {
@@ -22,6 +26,7 @@ async function bootstrap() {
 
     app.enableCors();
     app.useGlobalFilters(new HttpExceptionFilter(), new ValidationFilter());
+    app.useGlobalFilters(new WebSocketExceptionsFilter());
     app.useGlobalPipes(new HttpValidationPipe());
 
     app.setGlobalPrefix(API_PREFIX);

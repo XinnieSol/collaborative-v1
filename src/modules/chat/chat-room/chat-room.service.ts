@@ -47,4 +47,16 @@ export class ChatRoomService {
     async get(chatRoomId: string) {
         return this.chatRoomRepo.findOne({ where: { id: chatRoomId } });
     }
+
+    async fetchAll(userId: string) {
+        // pagination for perfomnce
+        return this.chatRoomRepo
+            .createQueryBuilder('chatRoom')
+            .leftJoin('chatRoom.members', 'member')
+            .where('member.userId = :userId', {
+                userId,
+            })
+            .select(['chatRoom.id', 'chatRoom.name'])
+            .getMany();
+    }
 }

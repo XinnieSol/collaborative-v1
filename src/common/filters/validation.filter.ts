@@ -8,7 +8,10 @@ import {
 import { BaseWsExceptionFilter, WsException } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { MessagePatternEnum } from 'src/common/enums';
-import { ValidationException } from 'src/common/exceptions';
+import {
+    ValidationException,
+    WsValidationException,
+} from 'src/common/exceptions';
 
 @Catch(ValidationException)
 export class ValidationFilter implements ExceptionFilter {
@@ -24,21 +27,17 @@ export class ValidationFilter implements ExceptionFilter {
     }
 }
 
-@Catch(WsException)
-export class WsExceptionsFilter extends BaseWsExceptionFilter {
-    catch(exception: WsException, host: ArgumentsHost) {
+@Catch(WsValidationException)
+export class WsValidationFilter extends BaseWsExceptionFilter {
+    catch(exception: WsValidationException, host: ArgumentsHost) {
         const client = host.switchToWs().getClient() as Socket;
         const data = host.switchToWs().getData();
-        const error = exception.getError() as {
-            message: string;
-            statusCode: number;
-        };
+        const errors = exception.validationErrors;
 
-        client.emit(MessagePatternEnum.EXCEPTION, error);
+        const extraMessage = errors.length ? errors[0]?.messages : '';
 
-        if (error?.statusCode == HttpStatus.UNAUTHORIZED) {
-            client.disconnect();
-        }
+        client.emit(MessagePatternEnum.EXCEPTION, extraMessage);
+
         return;
     }
 }

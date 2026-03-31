@@ -9,10 +9,14 @@ export enum MessageStatusEnum {
 }
 
 export enum MessagePatternEnum {
-    USER_SEND_MESSAGE = 'userSendMessage',
-    USER_NEW_MESSAGE = 'userNewMessage',
-    AI_SEND_MESSAGE = 'aiSendMessage',
+    SEND_MESSAGE = 'sendMessage',
+    NEW_MESSAGE = 'newMessage',
+
     JOIN_ROOM = 'joinRoom',
+    FETCH_ROOMS = 'fetchRooms',
+    FETCHED_ROOMS = 'fetchedRooms',
+
     JOINED_ROOM = 'joinedRoom',
     EXCEPTION = 'exception',
+    ONLINE = 'online',
 }

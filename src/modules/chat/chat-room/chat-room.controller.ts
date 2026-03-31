@@ -1,9 +1,11 @@
 import {
     Body,
     Controller,
+    Get,
     HttpStatus,
     Logger,
     Post,
+    Query,
     Request,
     UseGuards,
 } from '@nestjs/common';
@@ -38,6 +40,20 @@ export class ChatRoomController {
             );
         } catch (error) {
             this.logger.error(`Error creating room|REASON: ${error?.message}`);
+            throw new AppHttpException(error);
+        }
+    }
+
+    @Get('fetch')
+    async fetchAll(
+        @Request() req: RequestInterface,
+        @Query() query, // Query param needed,
+    ): Promise<HttpSuccessReponse> {
+        try {
+            const result = await this.chatRoomSrvice.fetchAll(req.user.id);
+            return successReponse('Chat rooms fetched', result);
+        } catch (error) {
+            this.logger.error(`Error fetching room|REASON: ${error?.message}`);
             throw new AppHttpException(error);
         }
     }

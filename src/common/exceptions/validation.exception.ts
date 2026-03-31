@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
-import { BaseWsExceptionFilter } from '@nestjs/websockets';
+import { BaseWsExceptionFilter, WsException } from '@nestjs/websockets';
 
-interface Error {
+export interface Error {
     error: string;
     message: string;
 }
@@ -17,8 +17,8 @@ interface BadRequestError {
     messages: String[];
 }
 
-export class WsValidationException extends BaseWsExceptionFilter {
+export class WsValidationException extends WsException {
     constructor(public validationErrors: BadRequestError[]) {
-        super();
+        super(validationErrors);
     }
 }

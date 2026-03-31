@@ -1,4 +1,4 @@
-import { Logger, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Logger, UseFilters, UseGuards } from '@nestjs/common';
 import {
     WebSocketGateway,
     WebSocketServer,
@@ -9,15 +9,17 @@ import {
 import { Server } from 'socket.io';
 import { MessagePatternEnum, SenderTypeEnum } from 'src/common/enums';
 import { AppWsException } from 'src/common/exceptions';
-import { WsExceptionsFilter } from 'src/common/filters';
+import { WsValidationFilter } from 'src/common/filters';
+import { WsAuthGuard } from 'src/common/guards';
 import type { ClientInterface } from 'src/common/interfaces';
+import { WsValidationPipe } from 'src/common/pipes';
 import { emitToRoom } from 'src/common/utils';
 import { SendMessageDto } from 'src/modules/chat/message/message.dto';
 import { MessageService } from 'src/modules/chat/message/message.service';
 
 @WebSocketGateway({ cors: true })
-@UsePipes(ValidationPipe)
-@UseFilters(WsExceptionsFilter)
+@UseGuards(WsAuthGuard)
+@UseFilters(new WsValidationFilter())
 export class MessageGateway {
     private readonly logger = new Logger(MessageGateway.name);
 
@@ -26,10 +28,10 @@ export class MessageGateway {
 
     constructor(private messageService: MessageService) {}
 
-    @SubscribeMessage(MessagePatternEnum.USER_SEND_MESSAGE)
+    @SubscribeMessage(MessagePatternEnum.SEND_MESSAGE)
     async handleMessage(
         @ConnectedSocket() client: ClientInterface,
-        @MessageBody() data: SendMessageDto,
+        @MessageBody(new WsValidationPipe(SendMessageDto)) data: SendMessageDto,
     ) {
         try {
             const message = await this.messageService.sendMessage(
@@ -40,15 +42,13 @@ export class MessageGateway {
             emitToRoom(
                 this.server,
                 data.chatRoomId,
-                MessagePatternEnum.USER_NEW_MESSAGE,
+                MessagePatternEnum.NEW_MESSAGE,
                 message,
             );
-
-            if (data.content.includes('@ai')) {
-            }
         } catch (error) {
+            console.log(error);
             this.logger.error(
-                `Error handling ${MessagePatternEnum.USER_SEND_MESSAGE}|REASON: ${error?.message}`,
+                `Error handling ${MessagePatternEnum.SEND_MESSAGE}|REASON: ${error?.message}`,
             );
             throw new AppWsException(error);
         }

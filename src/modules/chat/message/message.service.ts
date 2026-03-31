@@ -31,18 +31,16 @@ export class MessageService {
             );
         }
 
-        const messageData: Partial<MessageEntity> = {
+        const message = this.messageRepo.create({
             chatRoomId: dto.chatRoomId,
             senderId,
             senderType,
             content: dto.content,
-        };
-
+        });
         if (dto.replyToId) {
-            messageData.replyToId;
+            message.replyToId;
         }
 
-        const message = this.messageRepo.create(messageData);
         return await this.messageRepo.save(message);
     }
 }
