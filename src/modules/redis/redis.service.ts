@@ -14,4 +14,8 @@ export class RedisService {
         const data = JSON.stringify(value);
         await this.redisClient.set(key, value, 'EX', ttl, 'NX');
     }
+
+    async incr(key: string): Promise<number> {
+        return this.redisClient.incr(key);
+    }
 }

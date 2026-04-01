@@ -1,4 +1,5 @@
 export enum CacheKeyEnum {
     REGISTER = 'REGISTER',
     FORGOT_PASSWORD = 'FORGOT_PASSWORD',
+    WS_THROTTLE = 'WS_THROTTLE',
 }

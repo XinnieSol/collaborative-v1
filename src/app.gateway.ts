@@ -13,7 +13,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AppWsException } from 'src/common/exceptions';
-import { WsAuthGuard } from 'src/common/guards';
+import { WsAuthGuard, WsThrottlerGuard } from 'src/common/guards';
 import { ClientInterface } from 'src/common/interfaces';
 
 @WebSocketGateway({
@@ -22,7 +22,7 @@ import { ClientInterface } from 'src/common/interfaces';
     },
     allowEIO3: true,
 })
-@UseGuards(WsAuthGuard)
+@UseGuards(WsAuthGuard, WsThrottlerGuard)
 export class AppGateway implements OnGatewayInit, OnGatewayConnection {
     private readonly logger = new Logger(AppGateway.name);
 

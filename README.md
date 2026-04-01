@@ -89,6 +89,7 @@ The above are sperated into various collections because the former is HTTP where
 - Authentication Refresh 
 - Message threads. (A bit similar to the replyTo feature but more like a tree)
 - Message translation
+- Caching messages for to tune perfomance
 - Chatroom invite link
 - Chatroom roles
 - As admin Remove user from chat room
