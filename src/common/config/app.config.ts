@@ -33,6 +33,10 @@ export type AppConfig = {
         version: string;
         level: LogLevel;
     };
+    throttler: {
+        ttl: number;
+        limit: number;
+    };
 };
 
 const schema = Joi.object<AppConfig>({
@@ -54,6 +58,10 @@ const schema = Joi.object<AppConfig>({
         level: Joi.string()
             .valid(...logLevels)
             .required(),
+    }),
+    throttler: Joi.object({
+        ttl: Joi.number().integer().default('60'),
+        limit: Joi.number().integer().default(10),
     }),
 });
 
@@ -95,9 +103,13 @@ export const getConfig = (): AppConfig => {
             version,
             level: (process.env.LOG_LEVEL || 'log') as LogLevel,
         },
+        throttler: {
+            ttl: Number(process.env.THROTTLER_TTL || 60),
+            limit: Number(process.env.THROTTLER_LIMIT || 10),
+        },
     };
 };
-/* istanbul ignore next */
+
 export default registerAs('app', (): AppConfig => {
     const config = getConfig();
     Joi.assert(config, schema, `Validalidation failed for ${config.name}`);

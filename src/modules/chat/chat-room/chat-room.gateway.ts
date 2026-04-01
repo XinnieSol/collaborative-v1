@@ -10,7 +10,7 @@ import {
 import { Server } from 'socket.io';
 import { MessagePatternEnum } from 'src/common/enums';
 import { AppWsException } from 'src/common/exceptions';
-import { WsAuthGuard } from 'src/common/guards';
+import { WsAuthGuard, WsThrottlerGuard } from 'src/common/guards';
 import type { ClientInterface } from 'src/common/interfaces';
 import { joinRoom } from 'src/common/utils';
 import { ChatRoomService } from './chat-room.service';
@@ -20,7 +20,7 @@ import { WsValidationPipe } from 'src/common/pipes';
 import { ChatRoomMemberService } from 'src/modules/chat/chat-room/chat-room-member/chat-room-member.service';
 
 @WebSocketGateway({ cors: true })
-@UseGuards(WsAuthGuard)
+@UseGuards(WsAuthGuard, WsThrottlerGuard)
 export class ChatRoomGateway {
     private readonly logger = new Logger(ChatRoomGateway.name);
     @WebSocketServer()
