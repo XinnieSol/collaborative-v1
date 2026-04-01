@@ -75,7 +75,7 @@ async function bootstrap() {
         swaggerConfigOptions,
     );
 
-    await app.listen(server.port);
+    await app.listen(server.port || 4000);
 
     console.log('Server running on:', appUrl);
 
