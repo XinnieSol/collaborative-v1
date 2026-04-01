@@ -1,4 +1,4 @@
-import { Module, Provider } from '@nestjs/common';
+import { Global, Module, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthConfig } from 'src/common/config/auth.config';
@@ -15,6 +15,7 @@ export const authProvider: Provider = {
     inject: [ConfigService],
 };
 
+@Global()
 @Module({
     imports: [TypeOrmModule.forFeature([RefreshTokenEntity]), JwtCustomModule],
     providers: [TokenService, authProvider],
