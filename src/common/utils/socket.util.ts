@@ -7,11 +7,20 @@ export function emitToRoom(
     server: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>,
     roomId: string,
     messagePattern: MessagePatternEnum,
-    message: any,
+    data?: any,
 ) {
-    server.to(`${ROOM}_${roomId}`).emit(messagePattern, message);
+    server.to(`${ROOM}_${roomId}`).emit(messagePattern, data);
 }
 
 export function joinRoom(client: ClientInterface, roomId: string) {
     client.join(`${ROOM}_${roomId}`);
+    console.log(`Joined room: ${roomId}`);
+}
+
+export function emitToClient(
+    client: ClientInterface,
+    messagePattern: MessagePatternEnum,
+    data: any,
+) {
+    client.emit(messagePattern, data);
 }

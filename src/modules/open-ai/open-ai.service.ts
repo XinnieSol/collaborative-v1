@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { OpenAiConfig } from 'src/common/config/open-ai.config';
 import OpenAI from 'openai';
+import { ConversationalMessageDto } from 'src/modules/open-ai/open-ai.dto';
 
 @Injectable()
 export class OpenAIService {
@@ -19,6 +20,18 @@ export class OpenAIService {
         const response = await this.client.chat.completions.create({
             model: 'gpt-4o',
             messages: [{ role: 'user', content: prompt }],
+        });
+
+        return response.choices?.[0]?.message?.content ?? '';
+    }
+
+    async generateConversationalResponse(
+        messages: ConversationalMessageDto[],
+    ): Promise<string> {
+        this.logger.log(`Attempting to generate response for prompt ${prompt}`);
+        const response = await this.client.chat.completions.create({
+            model: 'gpt-4o',
+            messages: [...messages],
         });
 
         return response.choices?.[0]?.message?.content ?? '';

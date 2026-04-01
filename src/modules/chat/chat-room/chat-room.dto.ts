@@ -1,7 +1,7 @@
 import { AbstractDto } from 'src/common/dto';
 import { ChatRoomEntity } from './chat-room.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, Length } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { NotHasSpecialCharacters } from 'src/common/decorators';
 
@@ -30,4 +30,12 @@ export class CreateChatRoomDto {
         message: 'Name must not contain special character',
     })
     name: string;
+}
+
+export class JoinRoomDto {
+    @IsNotEmpty()
+    @IsString()
+    @Transform(({ value }) => value.trim())
+    @IsUUID(4, { message: 'Invalid chat room' })
+    chatRoomId: string;
 }

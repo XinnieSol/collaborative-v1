@@ -1,10 +1,11 @@
-import { Logger, UseGuards } from '@nestjs/common';
+import { HttpStatus, Logger, UseGuards } from '@nestjs/common';
 import {
     WebSocketGateway,
     WebSocketServer,
     SubscribeMessage,
     MessageBody,
     ConnectedSocket,
+    WsException,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { MessagePatternEnum } from 'src/common/enums';
@@ -13,7 +14,10 @@ import { WsAuthGuard } from 'src/common/guards';
 import type { ClientInterface } from 'src/common/interfaces';
 import { joinRoom } from 'src/common/utils';
 import { ChatRoomService } from './chat-room.service';
-import { successReponse } from 'src/common/helpers';
+import { socketErrorResponse, successReponse } from 'src/common/helpers';
+import { JoinRoomDto } from 'src/modules/chat/chat-room/chat-room.dto';
+import { WsValidationPipe } from 'src/common/pipes';
+import { ChatRoomMemberService } from 'src/modules/chat/chat-room/chat-room-member/chat-room-member.service';
 
 @WebSocketGateway({ cors: true })
 @UseGuards(WsAuthGuard)
@@ -22,18 +26,35 @@ export class ChatRoomGateway {
     @WebSocketServer()
     server: Server;
 
-    constructor(private readonly chatRoomService: ChatRoomService) {}
+    constructor(
+        private readonly chatRoomService: ChatRoomService,
+        private readonly chatRoomMemberService: ChatRoomMemberService,
+    ) {}
 
     @SubscribeMessage(MessagePatternEnum.JOIN_ROOM)
     async joinRoom(
         @ConnectedSocket() client: ClientInterface,
-        @MessageBody() data: { chatRoomId: string },
+        @MessageBody(new WsValidationPipe(JoinRoomDto)) data: JoinRoomDto,
     ) {
         this.logger.log(
             `Sucessfully recieved ${MessagePatternEnum.JOINED_ROOM}|Data: ${JSON.stringify(data)}`,
         );
         try {
+            const isMember = await this.chatRoomMemberService.getMemberUser(
+                data.chatRoomId,
+                client.user.id,
+            );
+
+            if (!isMember) {
+                throw new WsException(
+                    socketErrorResponse(
+                        'You are not a member',
+                        HttpStatus.FORBIDDEN,
+                    ),
+                );
+            }
             joinRoom(client, data.chatRoomId);
+
             client.emit(
                 MessagePatternEnum.JOINED_ROOM,
                 successReponse('Joined successfully'),

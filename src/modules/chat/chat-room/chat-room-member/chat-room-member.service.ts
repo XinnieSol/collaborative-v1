@@ -54,5 +54,11 @@ export class ChatRoomMemberService {
         return await this.chatRoomMemberRepo.save(member);
     }
 
+    async getMemberUser(chatRoomId: string, userId: string) {
+        return await this.chatRoomMemberRepo.findOne({
+            where: { chatRoomId, userId },
+        });
+    }
+
     async removeMember() {}
 }
