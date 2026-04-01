@@ -34,7 +34,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
                     ...configs,
                     namingStrategy: new SnakeCaseNamingStrategy(),
                     autoLoadEntities: true,
-                    migrations: ['dist/migrations/*{.js}'],
+                    migrations: ['dist/migrations/*{.ts,.js}'],
                 };
             },
             inject: [ConfigService],

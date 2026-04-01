@@ -12,8 +12,8 @@ export const getDefaultDataSource = () => {
 
     return new DataSource({
         ...databaseConfig,
-        entities: [path.join(__dirname, '..', '..', '**', '*.entity.js')],
-        migrations: ['dist/migrations/*.js'],
+        entities: [path.join(__dirname, '..', '..', '**', '*.entity.ts')],
+        migrations: ['src/migrations/*.ts'],
         namingStrategy: new SnakeCaseNamingStrategy(),
     } as PostgresConnectionOptions);
 };
