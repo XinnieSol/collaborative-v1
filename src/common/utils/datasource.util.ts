@@ -5,17 +5,17 @@ import { DataSource } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import path from 'path';
 
-export const getDefaultDataSource = () => {
-    dotenv.config();
+dotenv.config();
 
-    const databaseConfig = getConfig();
+const databaseConfig = getConfig();
 
-    return new DataSource({
-        ...databaseConfig,
-        entities: ['src/**/*.entity.ts'],
-        migrations: ['src/migrations/*.ts'],
-        namingStrategy: new SnakeCaseNamingStrategy(),
-    } as PostgresConnectionOptions);
-};
+const isProd = process.env.NODE_ENV === 'production';
 
-export default getDefaultDataSource();
+export const AppDataSource = new DataSource({
+    ...databaseConfig,
+    entities: isProd ? ['dist/**/*.entity.js'] : ['src/**/*.entity.ts'],
+    migrations: isProd ? ['dist/migrations/*.js'] : ['src/migrations/*.ts'],
+    namingStrategy: new SnakeCaseNamingStrategy(),
+} as PostgresConnectionOptions);
+
+export default AppDataSource;
