@@ -2,7 +2,7 @@
   Collaborative
 
 ## Overview
-This project is an MVP for the Light-weight Collaborative chat space for teams with voice synsthesis. Follows to the barest minimum, SOLID, DRY, KISS principles. The application is a monolith one as it is not. Uses Socket.io for real-time messaging and includes minimal RBAC, redis implementations for perfomance and rate-limiting 
+This project is an MVP for the Light-weight Collaborative chat space for teams. Follows to the barest minimum, SOLID, DRY, KISS principles. The application is a monolith one as it is not. Uses Socket.io for real-time messaging and includes minimal RBAC, redis implementations for perfomance and rate-limiting 
 
 The File structure sees all feature modularized appropriately
 
@@ -42,7 +42,6 @@ The above are sperated into various collections because the former is HTTP where
       * `exception` for catching proper error like unauthorized, missing/empty fields
       * `newMessage` event for new messages
       * `aiThinking` when "@ai" has been mention and is processing responses
-  
   ### Rate Limiting: 
     - Using throlers for HTTP request while a rate limit guate for WS
        
@@ -87,6 +86,7 @@ The above are sperated into various collections because the former is HTTP where
 
 ## Improvements with more time
 - Logging 
+- Authentication Refresh 
 - Message threads. (A bit similar to the replyTo feature but more like a tree)
 - Message translation
 - Chatroom invite link
