@@ -16,6 +16,7 @@ import { AuthMiddleware } from 'src/common/middlewares';
 import { ChatModule } from 'src/modules/chat/chat.module';
 import { AppGateway } from 'src/app.gateway';
 import { OpenAIModule } from 'src/modules/open-ai/open-ai.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
     imports: [
@@ -33,12 +34,15 @@ import { OpenAIModule } from 'src/modules/open-ai/open-ai.module';
                     ...configs,
                     namingStrategy: new SnakeCaseNamingStrategy(),
                     autoLoadEntities: true,
-                    migrations: ['dist/migrations/*{.ts,.js}'],
+                    migrations: ['dist/migrations/*{.js}'],
                 };
             },
             inject: [ConfigService],
         }),
-
+        // ThrottlerModule.forRoot({
+        //     // ttl: 60, // seconds
+        //     limit: 10, // max requests per ttl
+        // }),
         AuthModule,
         ChatModule,
         OpenAIModule,

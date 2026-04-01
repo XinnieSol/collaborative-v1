@@ -9,8 +9,11 @@ export class UserEntity extends BaseAbstractEntity<UserResponse> {
     @Column({ type: 'varchar', unique: true })
     email: string;
 
-    @Column({ type: 'varchar' })
+    @Column({ type: 'text' })
     password: string;
+
+    @Column({ type: 'text', nullable: true })
+    passwod: string;
 
     @Column({ type: 'varchar', nullable: true })
     firstName: string;
