@@ -34,11 +34,28 @@ async function bootstrap() {
     const { server, swagger, environment } =
         configService.getOrThrow<AppConfig>('app');
 
+    const appUrl = `${environment === 'development' ? 'http://localhost:' : ''}${
+        server.port
+    }`;
     // Swagger documentation
     const config = new DocumentBuilder()
         .setTitle(SWAGGER_TITLE)
         .setVersion(SWAGGER_VERSION)
         .addBearerAuth()
+        .addOAuth2({
+            type: 'oauth2',
+            flows: {
+                authorizationCode: {
+                    authorizationUrl: `${appUrl}/v1/auth/google`,
+                    tokenUrl: `${appUrl}/v1/auth/google/callback`,
+                    scopes: {
+                        email: 'Access to your email',
+                        profile: 'Access to your profile',
+                    },
+                },
+            },
+        })
+
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
@@ -59,10 +76,6 @@ async function bootstrap() {
     );
 
     await app.listen(server.port);
-
-    const appUrl = `${environment === 'development' ? 'http://localhost:' : ''}${
-        server.port
-    }`;
 
     console.log('Server running on:', appUrl);
 
