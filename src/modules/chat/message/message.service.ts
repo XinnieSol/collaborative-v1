@@ -234,6 +234,7 @@ export class MessageService {
                 'message.updatedAt',
                 'replyTo.id',
                 'replyTo.content',
+                'message.senderType',
             ])
             .orderBy({ 'message.createdAt': 'DESC' })
             .getManyAndCount();

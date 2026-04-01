@@ -3,6 +3,7 @@ import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { AbstractDto } from 'src/common/dto';
 import { PageOptionsDto } from 'src/common/dto/pagination';
+import { SenderTypeEnum } from 'src/common/enums';
 import { HttpSuccessReponse } from 'src/common/types';
 import { MessageEntity } from 'src/modules/chat/message/message.entity';
 import { UserEntity } from 'src/modules/user';
@@ -26,6 +27,9 @@ export class MessageResponse extends AbstractDto {
     @ApiResponseProperty()
     sender: Partial<UserEntity>;
 
+    @ApiResponseProperty()
+    senderType: SenderTypeEnum;
+
     constructor(entity: MessageEntity) {
         super(entity);
 
@@ -36,6 +40,9 @@ export class MessageResponse extends AbstractDto {
         this.createdAt = entity.createdAt;
         this.createdAt = entity.updatedAt;
         this.status = entity.status;
+        if (entity.senderType === SenderTypeEnum.AI) {
+            this.senderType = entity.senderType;
+        }
     }
 }
 
