@@ -3,11 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { OpenAiConfig } from 'src/common/config/open-ai.config';
 import { OpenAIService } from 'src/modules/open-ai/open-ai.service';
 
-export const OPENAI = 'OPENAI';
 const openAIProvider: Provider = {
-    provide: OPENAI,
+    provide: 'OPENAI',
     useFactory: (configService: ConfigService) => {
-        const config = configService.get<OpenAiConfig>('openai');
+        const config: OpenAiConfig = configService.getOrThrow('openai');
         return config;
     },
     inject: [ConfigService],

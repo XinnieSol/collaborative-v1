@@ -7,7 +7,7 @@ import {
     ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { MessagePatternEnum, SenderTypeEnum } from 'src/common/enums';
+import { MessagePatternEnum } from 'src/common/enums';
 import { AppWsException } from 'src/common/exceptions';
 import { WsValidationFilter } from 'src/common/filters';
 import { WsAuthGuard } from 'src/common/guards';
@@ -34,16 +34,10 @@ export class MessageGateway {
         @MessageBody(new WsValidationPipe(SendMessageDto)) data: SendMessageDto,
     ) {
         try {
-            const message = await this.messageService.sendMessage(
+            await this.messageService.sendMessage(
                 client.user.id,
-                SenderTypeEnum.HUMAN,
                 data,
-            );
-            emitToRoom(
                 this.server,
-                data.chatRoomId,
-                MessagePatternEnum.NEW_MESSAGE,
-                message,
             );
         } catch (error) {
             console.log(error);

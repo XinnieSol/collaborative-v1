@@ -15,6 +15,7 @@ import { AuthModule } from 'src/modules/auth/auth.module';
 import { AuthMiddleware } from 'src/common/middlewares';
 import { ChatModule } from 'src/modules/chat/chat.module';
 import { AppGateway } from 'src/app.gateway';
+import { OpenAIModule } from 'src/modules/open-ai/open-ai.module';
 
 @Module({
     imports: [
@@ -40,6 +41,7 @@ import { AppGateway } from 'src/app.gateway';
 
         AuthModule,
         ChatModule,
+        OpenAIModule,
     ],
     controllers: [AppController],
     providers: [AppService, AppGateway],
