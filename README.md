@@ -43,7 +43,7 @@ The above are sperated into various collections because the former is HTTP where
       * `newMessage` event for new messages
       * `aiThinking` when "@ai" has been mention and is processing responses
   ### Rate Limiting: 
-    - Using throlers for HTTP request while a rate limit guate for WS
+    - Using throttlers for HTTP request while a rate limit guate for WS
        
 # Assumption 
   - The application is not for person-to-person chat but a shared chat room for teams
