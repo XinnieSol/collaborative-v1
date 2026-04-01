@@ -18,9 +18,6 @@ export class ChatRoomEntity extends BaseAbstractEntity<ChatRoomResponse> {
     name: string;
 
     @Column({ type: 'uuid' })
-    cr: string;
-
-    @Column({ type: 'uuid' })
     creatorId: string;
 
     @ManyToOne(() => UserEntity)
