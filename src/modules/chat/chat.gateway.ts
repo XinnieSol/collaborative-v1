@@ -14,7 +14,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { AppWsException } from 'src/common/exceptions';
 import { WsValidationFilter } from 'src/common/filters';
-import { WsAuthGuard } from 'src/common/guards';
+import { WsAuthGuard, WsThrottlerGuard } from 'src/common/guards';
 import { ClientInterface } from 'src/common/interfaces';
 
 @WebSocketGateway({
@@ -24,7 +24,7 @@ import { ClientInterface } from 'src/common/interfaces';
     allowEIO3: true,
     namespace: '/chat',
 })
-@UseGuards(WsAuthGuard)
+@UseGuards(WsAuthGuard, WsThrottlerGuard)
 @UsePipes(ValidationPipe)
 @UseFilters(WsValidationFilter)
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection {

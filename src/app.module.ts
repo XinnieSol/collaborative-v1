@@ -16,6 +16,9 @@ import { AuthMiddleware } from 'src/common/middlewares';
 import { ChatModule } from 'src/modules/chat/chat.module';
 import { AppGateway } from 'src/app.gateway';
 import { OpenAIModule } from 'src/modules/open-ai/open-ai.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { AppConfig } from 'src/common/config/app.config';
 
 @Module({
     imports: [
@@ -38,13 +41,33 @@ import { OpenAIModule } from 'src/modules/open-ai/open-ai.module';
             },
             inject: [ConfigService],
         }),
-
+        ThrottlerModule.forRootAsync({
+            useFactory: (configService: ConfigService) => {
+                const configs: AppConfig =
+                    configService.getOrThrow<AppConfig>('app');
+                return {
+                    throttlers: [
+                        {
+                            ...configs.throttler,
+                        },
+                    ],
+                };
+            },
+            inject: [ConfigService],
+        }),
         AuthModule,
         ChatModule,
         OpenAIModule,
     ],
     controllers: [AppController],
-    providers: [AppService, AppGateway],
+    providers: [
+        AppService,
+        AppGateway,
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard,
+        },
+    ],
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {

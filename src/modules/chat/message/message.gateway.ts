@@ -10,7 +10,7 @@ import { Server } from 'socket.io';
 import { MessagePatternEnum } from 'src/common/enums';
 import { AppWsException } from 'src/common/exceptions';
 import { WsValidationFilter } from 'src/common/filters';
-import { WsAuthGuard } from 'src/common/guards';
+import { WsAuthGuard, WsThrottlerGuard } from 'src/common/guards';
 import type { ClientInterface } from 'src/common/interfaces';
 import { WsValidationPipe } from 'src/common/pipes';
 import { emitToClient, emitToRoom, joinRoom } from 'src/common/utils';
@@ -22,7 +22,7 @@ import {
 import { MessageService } from 'src/modules/chat/message/message.service';
 
 @WebSocketGateway({ cors: true })
-@UseGuards(WsAuthGuard)
+@UseGuards(WsAuthGuard, WsThrottlerGuard)
 @UseFilters(new WsValidationFilter())
 export class MessageGateway {
     private readonly logger = new Logger(MessageGateway.name);

@@ -1,98 +1,98 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Project Name
+  Collaborative
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Overview
+This project is an MVP for the Light-weight Collaborative chat space for teams. Follows to the barest minimum, SOLID, DRY, KISS principles. The application is a monolith one as it is not. Uses Socket.io for real-time messaging and includes minimal RBAC, redis implementations for perfomance and rate-limiting 
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The File structure sees all feature modularized appropriately
 
-## Description
+## Documentation 
+- Base url: https://collaborative-v1.onrender.com/v1 (HTTP) 
+- Postman: 
+APIs - https://www.postman.com/kairosclicks/workspace/ko/collection/16936021-d1a99890-7098-4733-a8c0-b36c2c3b0991?action=share&source=copy-link&creator=16936021
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Messaging - https://www.postman.com/kairosclicks/workspace/ko/collection/69cbc764b80ea68a9aafebf1?action=share&source=copy-link&creator=16936021
 
-## Project setup
+The above are sperated into various collections because the former is HTTP where as the latter is WS and cannot not be in the same collection
 
-```bash
-$ npm install
-```
+- Swagger Open API: https://collaborative-v1.onrender.com/api-documentation
 
-## Compile and run the project
+## Features
+- Authentication: 
+  ### Registration/Onboarding:
+  - Register (No email service implemented hence for test purposes, it return a verification code)
+  - Verify Email (No email service implemented hence for test purposes, it return a verification code)
+  ### Login
+  * Basic authentication: Including login, forgot and reset password implementation
 
-```bash
-# development
-$ npm run start
+- Strict User Input Validations.
 
-# watch mode
-$ npm run start:dev
+- Chat Rooms: User can create chat rooms (or team channel) and then add users to their chat room. where only members are allowed to send or recieve messages.
 
-# production mode
-$ npm run start:prod
-```
+- Message ReplyTo: a user (who is a member of a chat room) can reply to a single message (For example how it works on Ms Teams, WhatsApp, etc.)
 
-## Run tests
+- Message search: A user can search for a keyword amongs all messages effectively using  as search term. See `/messages` endpoint
 
-```bash
-# unit tests
-$ npm run test
+- Message Status Management
 
-# e2e tests
-$ npm run test:e2e
+- Open AI Implementation: AI has access to all chat rooms an gets invoked when when mentioned to respond to a message where context is derived by obtaining  summary.
 
-# test coverage
-$ npm run test:cov
-```
+  ### Real time chating events:
+    - User upon been added to a chat trigger `joinRoom` listens to:
+      * `exception` for catching proper error like unauthorized, missing/empty fields
+      * `newMessage` event for new messages
+      * `aiThinking` when "@ai" has been mention and is processing responses
+  ### Rate Limiting: 
+    - Using throttlers for HTTP request while a rate limit guate for WS
+       
+# Assumption 
+  - The application is not for person-to-person chat but a shared chat room for teams
 
-## Deployment
+## What you should know
+- Application was deployed on Render free version and as such makes inital request to delay by 50 second or more
+- OpenAI free credits may run out via testing,
+- Middleware was used for Enrichment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Setup 
+1. Requires:
+ - NodeJS >=18.0
+ - NestJS >= 11 
+ - TypeScript
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+3. Run:
+  ```bash
+    npm run migration:run
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Migrations
+- To generate migrations run:
+  ```bash
+    npm run migration:generate src/migrations/{{nameOfYourMigration}} 
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+- To migrate run:
+  ```bash
+    npm run migration:run
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+- To revert run:
+  ```bash
+    npm run migration:revert
 
-## Resources
+## Testing 
+  To run test:
+    ```bash
+      npm run migration:revert
 
-Check out a few resources that may come in handy when working with NestJS:
+## Improvements with more time
+- Logging 
+- Authentication Refresh 
+- Message threads. (A bit similar to the replyTo feature but more like a tree)
+- Message translation
+- Caching messages for to tune perfomance
+- Chatroom invite link
+- Chatroom roles
+- As admin Remove user from chat room
+- Email service
+- More Unit tests
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
