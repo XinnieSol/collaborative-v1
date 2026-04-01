@@ -13,10 +13,21 @@ import {
     SWAGGER_TITLE,
     SWAGGER_VERSION,
 } from './common/constants';
+import {
+    HttpExceptionFilter,
+    ValidationFilter,
+    WebSocketExceptionsFilter,
+} from 'src/common/filters';
+import { HttpValidationPipe } from 'src/common/pipes';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const configService = app.get(ConfigService);
+
+    app.enableCors();
+    app.useGlobalFilters(new HttpExceptionFilter(), new ValidationFilter());
+    app.useGlobalFilters(new WebSocketExceptionsFilter());
+    app.useGlobalPipes(new HttpValidationPipe());
 
     app.setGlobalPrefix(API_PREFIX);
 

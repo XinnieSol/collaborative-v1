@@ -30,7 +30,7 @@ export const getConfig = (): DbConfig => ({
     host: process.env.DB_HOST || '127.0.0.1',
     port: parseInt(process.env.DB_PORT || '5432', 10),
     username: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'password',
+    password: process.env.DB_PASSWORD || '',
     synchronize: process.env.DB_SYNCHRONIZE === 'true',
     logging: process.env.DB_LOGGING === 'true',
 });
