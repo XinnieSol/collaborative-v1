@@ -3,17 +3,19 @@ import { SnakeCaseNamingStrategy } from 'src/common/utils/snake-case-naming-stra
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import path from 'path';
+
+dotenv.config();
 
 export const getDefaultDataSource = () => {
     dotenv.config();
 
     const databaseConfig = getConfig();
+    const isProd = process.env.NODE_ENV === 'production';
 
     return new DataSource({
         ...databaseConfig,
-        entities: ['src/**/*.entity.ts'],
-        migrations: ['src/migrations/*.ts'],
+        entities: isProd ? ['dist/**/*.entity.js'] : ['src/**/*.entity.ts'],
+        migrations: isProd ? ['dist/migrations/*.js'] : ['src/migrations/*.ts'],
         namingStrategy: new SnakeCaseNamingStrategy(),
     } as PostgresConnectionOptions);
 };

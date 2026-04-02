@@ -16,6 +16,7 @@ Messaging - https://www.postman.com/kairosclicks/workspace/ko/collection/69cbc76
 The above are sperated into various collections because the former is HTTP where as the latter is WS and cannot not be in the same collection
 
 - Swagger Open API: https://collaborative-v1.onrender.com/api-documentation
+- See Test section for test users.
 
 ## Features
 - Authentication: 
@@ -73,26 +74,37 @@ The above are sperated into various collections because the former is HTTP where
 
 - To migrate run:
   ```bash
-    npm run migration:run
+    npm run migration:run:dev
 
 - To revert run:
   ```bash
-    npm run migration:revert
+    npm run migration:revert:dev
 
-## Testing 
-  To run test:
+### Testing 
+  -To run test:
     ```bash
-      npm run migration:revert
+      npm run test
+    ```
 
-## Improvements with more time
-- Logging 
+  - Test users:
+    1. email: "johnydoe@mailsac.com" ; Password: "Password123#"
+    2. email: "lukadoe@mailsac.com" ; Password: "Password123#"
+
+### Guidlines
+  - Entity Class property names should be camel-cased and it is automatically converted to snake-cased column name. Hence, hence column names should not be manually set to avoid naming errors.
+
+### Improvements with more time
+- Voice to text
+- Voice message (Voice Notes)
+- Full implementation for "last seen"
+- Better logging 
 - Authentication Refresh 
 - Message threads. (A bit similar to the replyTo feature but more like a tree)
 - Message translation
 - Caching messages for to tune perfomance
 - Chatroom invite link
 - Chatroom roles
-- As admin Remove user from chat room
+- Admin of a channel Remove user from chat room
 - Email service
 - More Unit tests
 
