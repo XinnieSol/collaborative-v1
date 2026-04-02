@@ -19,3 +19,5 @@ export const getDefaultDataSource = () => {
         namingStrategy: new SnakeCaseNamingStrategy(),
     } as PostgresConnectionOptions);
 };
+
+export default getDefaultDataSource();
